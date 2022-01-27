@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
-router.post('/');
+const userMiddleware = require('../middlewares/users');
+
+router.put('/:id', userMiddleware.updateUser);
 
 module.exports = router;
