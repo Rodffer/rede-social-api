@@ -1,0 +1,36 @@
+{
+  "name": "rede-social-api",
+  "version": "1.0.0",
+  "description": "rede-social",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rodffer/rede-social-api.git"
+  },
+  "keywords": [
+    "rede",
+    "social",
+    "api",
+    "nodejs",
+    "mongo",
+    "mongoose"
+  ],
+  "author": "Rayron Rodffer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rodffer/rede-social-api/issues"
+  },
+  "homepage": "https://github.com/Rodffer/rede-social-api#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "mongoose": "^6.1.8",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
