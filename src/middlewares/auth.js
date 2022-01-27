@@ -16,6 +16,18 @@ async function registerUser(req, res, next) {
       return res.status(400).json({ error: 'Validação falhou'});
     }
 
+    const existsUserName = await User.exists({ userName });
+
+    if(existsUserName){
+      return res.status(400).json({ error: 'Nome de usuário inválido'});
+    }
+
+    const existsEmail = await User.exists({ email });
+
+    if(existsEmail){
+      return res.status(400).json({ error: 'E-mail inválido'});
+    }
+
     const hashedPassword = await bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT));
 
     const user = await new User({
