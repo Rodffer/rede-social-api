@@ -44,6 +44,35 @@ async function registerUser(req, res, next) {
   }
 };
 
+async function loginUser(req, res, next) {
+  try {
+    const { email, password } = req.body;
+
+    let schema = yup.object().shape({
+      email: yup.string().email().required(),
+      password: yup.string().min(6).required()
+    });
+
+    if(!(await schema.isValid(req.body))){
+      return res.status(400).json({ error: 'Validação falhou'});
+    }
+
+    const user = await User.findOne({ email });
+    !user && res.status(400).json({ error: 'Usuário e ou senha incorretos'});
+
+    const isValidPassword = await bcrypt.compare(password, user.password)
+    !isValidPassword && res.status(400).json({ error: 'Usuário e ou senha incorretos'});
+    
+
+  
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({error: 'Não foi possível fazer login'});
+  }
+};
+
 module.exports ={
-  registerUser
+  registerUser,
+  loginUser
 }
