@@ -62,13 +62,11 @@ async function loginUser(req, res, next) {
 
     const isValidPassword = await bcrypt.compare(password, user.password)
     !isValidPassword && res.status(400).json({ error: 'Usuário e ou senha incorretos'});
-    
-
   
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
-    return res.status(400).json({error: 'Não foi possível fazer login'});
+    return res.status(500).json({error: 'Erro interno do servidor'});
   }
 };
 
