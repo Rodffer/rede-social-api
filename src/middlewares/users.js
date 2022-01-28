@@ -111,7 +111,7 @@ async function followUser(req, res, next) {
 
       if(!user.followers.includes(userId)){
         await user.updateOne({ $push: { followers: userId }});
-        await currentUser.updateOne({ $push: { followings: userId }});
+        await currentUser.updateOne({ $push: { followings: id }});
 
         return res.status(200).json({message: 'Usuário seguido com sucesso'});
 
