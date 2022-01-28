@@ -99,8 +99,39 @@ async function searchUser(req, res, next) {
   }
 };
 
+async function followUser(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    if(userId !== id){
+
+      const user = await User.findById({_id: id});
+      const currentUser = await User.findById({_id: userId});
+
+      if(!user.followers.includes(userId)){
+        await user.updateOne({ $push: { followers: userId }});
+        await currentUser.updateOne({ $push: { followings: userId }});
+
+        return res.status(200).json({message: 'Usuário seguido com sucesso'});
+
+      } else{ 
+        return res.status(403).json({message: 'Você já segue esse usuário'});
+      }
+
+
+    } else {
+      return res.status(400).json({message: 'Não é possível seguir o próprio perfil'});
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: 'Erro interno do servidor'});
+  }
+};
+
 module.exports ={
   updateUser,
   deleteUser,
-  searchUser
+  searchUser,
+  followUser
 }
