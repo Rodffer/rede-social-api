@@ -16,6 +16,18 @@ async function createPost(req, res, next) {
 
 async function updatePost(req, res, next) {
   try {
+    const { id } = req.params;
+    const post = await Post.findById({_id: id});
+
+    const { userId } = req.body;
+
+    if(post.userId === userId){
+      await post.updateOne({ $set: req.body });
+
+      return res.status(200).json({message: 'Post atualizado com sucesso'});
+    } else {
+      return res.status(403).json({error: 'Usuário não tem permissão de edição'});
+    }
 
   } catch (error) {
     console.log(error);

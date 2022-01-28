@@ -3,7 +3,7 @@ const router = require('express').Router();
 const postMiddleware = require('../middlewares/posts');
 
 router.post('/', postMiddleware.createPost);
-router.put('/', postMiddleware.updatePost);
+router.put('/:id', postMiddleware.updatePost);
 router.delete('/:id', postMiddleware.deletePost);
 router.put('/like', postMiddleware.likePost);
 router.get('/', postMiddleware.getPost);
