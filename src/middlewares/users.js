@@ -129,9 +129,40 @@ async function followUser(req, res, next) {
   }
 };
 
+async function unfollowUser(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    if(userId !== id){
+
+      const user = await User.findById({_id: id});
+      const currentUser = await User.findById({_id: userId});
+
+      if(user.followers.includes(userId)){
+        await user.updateOne({ $pull: { followers: userId }});
+        await currentUser.updateOne({ $pull: { followings: id }});
+
+        return res.status(200).json({message: 'Usuário deixou de seguir com sucesso'});
+
+      } else{ 
+        return res.status(403).json({message: 'Você não segue esse usuário'});
+      }
+
+
+    } else {
+      return res.status(400).json({message: 'Não é possível deixar de seguir o próprio perfil'});
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: 'Erro interno do servidor'});
+  }
+};
+
 module.exports ={
   updateUser,
   deleteUser,
   searchUser,
-  followUser
+  followUser,
+  unfollowUser
 }
