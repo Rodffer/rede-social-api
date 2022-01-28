@@ -74,7 +74,33 @@ async function deleteUser(req, res, next) {
   }
 };
 
+async function searchUser(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    const existsUser = await User.exists({ id });
+
+    if(!existsUser){
+      return res.status(400).json({ error: 'Usuário não encontrado'});
+    }
+
+    const response = await User.findById(id);
+
+    const { password, updatedAt, ...other} = response._doc;
+
+    if(!response){
+      return res.status(400).json({message: 'Não foi possível buscar o usuário'});
+    }
+
+    return res.status(200).json(other);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: 'Erro interno do servidor'});
+  }
+};
+
 module.exports ={
   updateUser,
-  deleteUser
+  deleteUser,
+  searchUser
 }
