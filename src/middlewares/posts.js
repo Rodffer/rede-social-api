@@ -23,7 +23,7 @@ async function updatePost(req, res, next) {
     if(!postExists){
       return res.status(400).json({message: 'Post não encontrado'});
     }
-    
+
     const post = await Post.findById({_id: id});
 
     const { userId } = req.body;
@@ -71,6 +71,26 @@ async function deletePost(req, res, next) {
 
 async function likePost(req, res, next) {
   try {
+    const { id } = req.params;
+
+    const postExists = await Post.exists({_id: id});
+
+    if(!postExists){
+      return res.status(400).json({message: 'Post não encontrado'});
+    }
+
+    const post = await Post.findById({_id: id});
+
+    const { userId } = req.body;
+
+    if(!post.likes.includes(userId)){
+      await post.updateOne({ $push: { likes: userId } });
+
+      return res.status(200).json({message: 'Curtida adicionada'});
+    } else{
+      await post.updateOne({ $pull: { likes: userId } });
+      return res.status(200).json({message: 'Curtida removida'});
+    }
 
   } catch (error) {
     console.log(error);
