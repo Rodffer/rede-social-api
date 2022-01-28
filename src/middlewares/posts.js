@@ -17,6 +17,13 @@ async function createPost(req, res, next) {
 async function updatePost(req, res, next) {
   try {
     const { id } = req.params;
+
+    const postExists = await Post.exists({_id: id});
+
+    if(!postExists){
+      return res.status(400).json({message: 'Post não encontrado'});
+    }
+    
     const post = await Post.findById({_id: id});
 
     const { userId } = req.body;
@@ -37,7 +44,25 @@ async function updatePost(req, res, next) {
 
 async function deletePost(req, res, next) {
   try {
+    const { id } = req.params;
 
+    const postExists = await Post.exists({_id: id});
+
+    if(!postExists){
+      return res.status(400).json({message: 'Post não encontrado'});
+    }
+
+    const post = await Post.findById({_id: id});
+
+    const { userId } = req.body;
+
+    if(post.userId === userId){
+      await post.deleteOne();
+
+      return res.status(200).json({message: 'Post removido com sucesso'});
+    } else {
+      return res.status(403).json({error: 'Usuário não tem permissão para remover o post'});
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({error: 'Erro interno do servidor'});
