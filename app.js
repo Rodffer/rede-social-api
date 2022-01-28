@@ -6,6 +6,8 @@ const morgan = require('morgan');
 
 const authRoute = require('./src/routes/auth');
 const userRoute = require('./src/routes/users');
+const postRoute = require('./src/routes/posts');
+
 const app = express();
 
 dotenv.config();
@@ -24,6 +26,7 @@ app.use(morgan('combined'));
 
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
+app.use('/api/posts', postRoute);
 
 app.listen(3200, () => {
   console.log('------------------');
