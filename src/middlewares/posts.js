@@ -100,7 +100,18 @@ async function likePost(req, res, next) {
 
 async function getPost(req, res, next) {
   try {
+    const { id } = req.params;
 
+    const postExists = await Post.exists({_id: id});
+
+    if(!postExists){
+      return res.status(400).json({message: 'Post não encontrado'});
+    }
+
+    const post = await Post.findById({_id: id});
+
+    return res.status(400).json(post);
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({error: 'Erro interno do servidor'});
