@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 async function createPost(req, res, next) {
   try {
@@ -111,7 +112,7 @@ async function getPost(req, res, next) {
     const post = await Post.findById({_id: id});
 
     return res.status(400).json(post);
-    
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({error: 'Erro interno do servidor'});
@@ -120,7 +121,17 @@ async function getPost(req, res, next) {
 
 async function getTimelinePost(req, res, next) {
   try {
+    const { userId } = req.body;
 
+    const currentUser = await User.findById({ _id: userId });
+    const userPosts = await Post.find({ userId: currentUser._id});
+    const friendPosts = await Promise.all(
+      currentUser.followings.map((friendId) => {
+        return Post.find({ userId: friendId });
+      })
+    )
+
+    return res.status(200).json(userPosts.concat(...friendPosts));
   } catch (error) {
     console.log(error);
     return res.status(500).json({error: 'Erro interno do servidor'});

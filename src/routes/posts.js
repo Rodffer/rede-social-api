@@ -7,6 +7,6 @@ router.put('/:id', postMiddleware.updatePost);
 router.delete('/:id', postMiddleware.deletePost);
 router.put('/:id/like', postMiddleware.likePost);
 router.get('/:id', postMiddleware.getPost);
-router.get('/timeline', postMiddleware.getTimelinePost);
+router.get('/timeline/all', postMiddleware.getTimelinePost);
 
 module.exports = router;
