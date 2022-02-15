@@ -121,7 +121,7 @@ async function getPost(req, res, next) {
 
 async function getTimelinePost(req, res, next) {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
 
     const currentUser = await User.findById({ _id: userId });
     const userPosts = await Post.find({ userId: currentUser._id});
