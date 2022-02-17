@@ -76,15 +76,17 @@ async function deleteUser(req, res, next) {
 
 async function searchUser(req, res, next) {
   try {
-    const { id } = req.params;
+    // const { id } = req.params;
 
-    const existsUser = await User.exists({ id });
+    // const existsUser = await User.exists({ id });
 
-    if(!existsUser){
-      return res.status(400).json({ error: 'Usuário não encontrado'});
-    }
+    // if(!existsUser){
+    //   return res.status(400).json({ error: 'Usuário não encontrado'});
+    // }
 
-    const response = await User.findById(id);
+    const { username, userId } = req.query;
+
+    const response = userId ? await User.findById({userId}) : await User.findOne({username});
 
     const { password, updatedAt, ...other} = response._doc;
 
